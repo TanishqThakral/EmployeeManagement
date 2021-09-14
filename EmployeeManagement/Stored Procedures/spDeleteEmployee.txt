@@ -1,0 +1,7 @@
+﻿CREATE PROCEDURE spDeleteEmployee
+@Id nvarchar(50)
+as
+Begin
+	Delete from Employee 
+	where Id =@Id
+End

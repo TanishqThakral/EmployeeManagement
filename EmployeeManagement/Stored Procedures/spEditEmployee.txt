@@ -1,0 +1,9 @@
+﻿CREATE PROCEDURE [dbo].[spEditEmployee]
+@Id nvarchar(50),
+@Name nvarchar(50)
+as
+Begin
+	UPDATE Employee 
+	Set Name =  @Name
+	Where Id = @Id
+End

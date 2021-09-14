@@ -23,7 +23,8 @@ namespace EmployeeManagement.EmployeeData
             List<Employee> employees = new List<Employee>();
 
             SqlConnection con= new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            SqlCommand cmd = new SqlCommand("Select * from Employee",con);
+            SqlCommand cmd = new SqlCommand("spGetEmployees",con);
+            cmd.CommandType = CommandType.StoredProcedure;
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             da.Fill(dt);
@@ -45,7 +46,10 @@ namespace EmployeeManagement.EmployeeData
             employee.Id = Guid.NewGuid().ToString();          
 
             SqlConnection con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            SqlCommand cmd = new SqlCommand("Insert into Employee values ('" + employee.Id + "' , '" + employee.Name + "')",con);
+            SqlCommand cmd = new SqlCommand("spAddEmployee", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("Id", employee.Id);
+            cmd.Parameters.AddWithValue("Name", employee.Name);
             con.Open();
             cmd.ExecuteNonQuery();
             con.Close();
@@ -56,7 +60,9 @@ namespace EmployeeManagement.EmployeeData
         public void DelEmployee(string id)
         {
             SqlConnection con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            SqlCommand cmd = new SqlCommand("Delete from Employee where Id = '" + id + "'", con);
+            SqlCommand cmd = new SqlCommand("spDeleteEmployee", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("Id", id);
             con.Open();
             cmd.ExecuteNonQuery();
             con.Close();
@@ -65,7 +71,10 @@ namespace EmployeeManagement.EmployeeData
         public Employee EditEmployee(Employee employee)
         {
             SqlConnection con = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
-            SqlCommand cmd = new SqlCommand("UPDATE Employee SET Name ='" +employee.Name + "' WHERE Id = '" + employee.Id + "'", con);
+            SqlCommand cmd = new SqlCommand("spEditEmployee", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("Id", employee.Id);
+            cmd.Parameters.AddWithValue("Name", employee.Name);
             con.Open();
             cmd.ExecuteNonQuery();
             con.Close();
